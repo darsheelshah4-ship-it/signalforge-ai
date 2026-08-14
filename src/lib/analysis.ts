@@ -1,18 +1,16 @@
-import { format, subDays, subMonths } from "date-fns";
+import { format, subMonths } from "date-fns";
 import {
   COMPANY_PROFILES,
   FUNDING_EVENTS,
-  GENERIC_INDUSTRY,
   GITHUB_REPOS,
-  INDUSTRIES,
   PRODUCT_HUNT_LAUNCHES,
   REDDIT_THREADS,
-  type CompanyProfile,
   type FactorKey,
   type IndustryData,
   type Severity,
   type SourceKind,
   daysAgo,
+  findCompany,
   findIndustry,
 } from "./market-data";
 
@@ -379,7 +377,7 @@ const HIRING_ROLES = [
 ];
 
 export function generateCompanyAnalysis(name: string): CompanyAnalysis {
-  const existing = COMPANY_PROFILES[name.trim()];
+  const existing = findCompany(name);
   if (existing) {
     return { ...existing, confidence: "high" };
   }
@@ -454,7 +452,7 @@ export function generateCompanyAnalysis(name: string): CompanyAnalysis {
 
 /* ---------------- Feed helpers ---------------- */
 
-export function trendSeries(base: number, growth: number, months = 8): number[] {
+export function trendSeries(base: number, growth: number): number[] {
   const rng = mulberry32(hashString(`${base}-${growth}`));
   return buildGrowthSeries(rng, Math.min(96, base + growth / 3));
 }
