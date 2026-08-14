@@ -1363,7 +1363,7 @@ export const COMPANY_PROFILES: Record<string, CompanyProfile> = {
     comparison:
       "GitHub is the signal source and the distribution platform. For SignalForge-style products, GitHub activity is core evidence — stars, issues, and commits are leading indicators of developer demand that public markets haven't fully priced.",
   },
-];
+};
 
 /* ---------------- Live-source feeds ---------------- */
 

@@ -233,6 +233,16 @@
   }
 }
 
+/* Research progress bar sweep */
+@keyframes sf-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 /* Slow float for hero art */
 @keyframes sf-float {
   0%,

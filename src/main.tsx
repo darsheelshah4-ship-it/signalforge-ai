@@ -15,6 +15,19 @@ const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
+// Dashboard sub-pages
+const Overview = lazy(() => import("./pages/dashboard/overview.tsx"));
+const SearchPage = lazy(() => import("./pages/dashboard/search.tsx"));
+const Trends = lazy(() => import("./pages/dashboard/trends.tsx"));
+const Funding = lazy(() => import("./pages/dashboard/funding.tsx"));
+const ProductHunt = lazy(() => import("./pages/dashboard/product-hunt.tsx"));
+const GitHubPage = lazy(() => import("./pages/dashboard/github.tsx"));
+const Reddit = lazy(() => import("./pages/dashboard/reddit.tsx"));
+const Competitors = lazy(() => import("./pages/dashboard/competitors.tsx"));
+const Startups = lazy(() => import("./pages/dashboard/startups.tsx"));
+const Reports = lazy(() => import("./pages/dashboard/reports.tsx"));
+const Settings = lazy(() => import("./pages/dashboard/settings.tsx"));
+
 // Simple loading fallback for route transitions
 function RouteLoading() {
   return (
@@ -131,7 +144,19 @@ createRoot(document.getElementById("root")!).render(
                     <Dashboard />
                   </RequireAuth>
                 }
-              />
+              >
+                <Route index element={<Overview />} />
+                <Route path="search" element={<SearchPage />} />
+                <Route path="trends" element={<Trends />} />
+                <Route path="funding" element={<Funding />} />
+                <Route path="product-hunt" element={<ProductHunt />} />
+                <Route path="github" element={<GitHubPage />} />
+                <Route path="reddit" element={<Reddit />} />
+                <Route path="competitors" element={<Competitors />} />
+                <Route path="startups" element={<Startups />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
