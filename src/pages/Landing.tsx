@@ -1,9 +1,18 @@
+import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { motion } from "framer-motion";
 import {
+  AlertTriangle,
   ArrowRight,
   BarChart3,
   Check,
@@ -11,6 +20,7 @@ import {
   FileSearch,
   Github,
   Globe,
+  Lightbulb,
   LineChart,
   Mail,
   Newspaper,
@@ -139,10 +149,245 @@ const PLANS = [
 ];
 
 /* ------------------------------------------------------------------ */
+/* Full brief dialog (hero mock)                                       */
+/* ------------------------------------------------------------------ */
+
+const BRIEF_FACTORS = [
+  { label: "Growth", value: 92 },
+  { label: "Competition", value: 38 },
+  { label: "Funding", value: 90 },
+  { label: "Hiring", value: 84 },
+  { label: "Developer interest", value: 78 },
+  { label: "Community discussion", value: 71 },
+];
+
+function HeroBriefDialog({
+  open,
+  onOpenChange,
+  onStartResearch,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onStartResearch: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto border-white/10 bg-[#101014] p-0 text-white sm:max-w-2xl">
+        <DialogHeader className="border-b border-white/8 p-6 pr-12 text-left">
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="bg-blue-500/15 text-blue-300">
+              84/100 · Strong opportunity
+            </Badge>
+            <span className="text-xs text-white/35">AI developer tooling</span>
+          </div>
+          <DialogTitle className="mt-3 text-xl leading-snug text-white">
+            Full opportunity brief: AI developer tooling & infrastructure
+          </DialogTitle>
+          <DialogDescription className="text-sm leading-relaxed text-white/50">
+            The complete report behind the dashboard above — and how SignalForge
+            builds it for every question you ask.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-8 p-6">
+          {/* Executive summary */}
+          <section>
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <FileSearch className="size-3.5 text-blue-400" />
+              Executive summary
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              Developer tooling is at an inflection moment: funding velocity is
+              accelerating, launches are capturing outsized attention, and open-source
+              adoption is compounding. Demand is broad, but the space is crowding fast —
+              the window to differentiate is short. SignalForge's read: build now, own a
+              narrow workflow, and let live signals tell you the week the market moves.
+            </p>
+          </section>
+
+          {/* How it works */}
+          <section>
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <Sparkles className="size-3.5 text-blue-400" />
+              How SignalForge built this brief
+            </h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  icon: Search,
+                  step: "1 · Ask",
+                  text: "Type a plain-English question about any market, competitor, or idea — no dashboards to configure.",
+                },
+                {
+                  icon: Globe,
+                  step: "2 · Collect",
+                  text: "Bright Data Scraper Studio pulls live public signals from 7 sources around the clock.",
+                },
+                {
+                  icon: BarChart3,
+                  step: "3 · Analyze",
+                  text: "AI cross-references every signal across six weighted factor groups and scores the category out of 100.",
+                },
+                {
+                  icon: FileSearch,
+                  step: "4 · Deliver",
+                  text: "You get a sourced, scored brief — insights, startup angles, and risks — in seconds.",
+                },
+              ].map((s) => (
+                <div key={s.step} className="rounded-xl border border-white/8 bg-white/3 p-4">
+                  <div className="flex items-center gap-2">
+                    <s.icon className="size-4 text-blue-300" />
+                    <p className="text-xs font-semibold uppercase tracking-widest text-white/60">
+                      {s.step}
+                    </p>
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-white/50">{s.text}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Key insights */}
+          <section>
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <TrendingUp className="size-3.5 text-blue-400" />
+              Key insights
+            </h3>
+            <ul className="mt-3 space-y-2.5">
+              {[
+                {
+                  dot: "bg-blue-400",
+                  text: "Funding velocity is accelerating — a $120M Series C landed in the category this week.",
+                },
+                {
+                  dot: "bg-cyan-400",
+                  text: "Launches are capturing attention — an AI coding tool hit #1 on Product Hunt today.",
+                },
+                {
+                  dot: "bg-violet-400",
+                  text: "Developer interest is compounding — an MCP project grew +98% in GitHub stars this quarter.",
+                },
+                {
+                  dot: "bg-emerald-400",
+                  text: "Buyers are vocal — a workflow pain thread reached 2.2k upvotes on Reddit.",
+                },
+              ].map((i) => (
+                <li
+                  key={i.text}
+                  className="flex items-start gap-2.5 rounded-lg border border-white/6 bg-white/3 p-3"
+                >
+                  <span className={`mt-1.5 size-1.5 shrink-0 rounded-full ${i.dot}`} />
+                  <p className="text-sm text-white/70">{i.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Factor scores */}
+          <section>
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <Radar className="size-3.5 text-blue-400" />
+              Factor scores · weighted to 84/100
+            </h3>
+            <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+              {BRIEF_FACTORS.map((f) => (
+                <div key={f.label} className="rounded-lg border border-white/6 bg-white/3 p-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-white/60">{f.label}</p>
+                    <p className="text-sm font-bold text-white">{f.value}</p>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${f.value}%` }}
+                      transition={{ duration: 0.9, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Startup angles + risks */}
+          <section className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+                <Lightbulb className="size-3.5 text-blue-400" />
+                Startup angles
+              </h3>
+              <ul className="mt-3 space-y-2.5">
+                {[
+                  "Governance & observability for MCP servers",
+                  "Analytics for agent-heavy dev stacks",
+                  "Vertical support copilot for dev platforms",
+                ].map((a) => (
+                  <li key={a} className="flex items-start gap-2 text-sm text-white/70">
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-blue-400" />
+                    {a}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+                <AlertTriangle className="size-3.5 text-amber-400" />
+                Risks to de-risk first
+              </h3>
+              <ul className="mt-3 space-y-2.5">
+                {[
+                  "Category crowding — fast capital is attracting fast followers.",
+                  "Platform dependency — momentum rides on a few large ecosystems.",
+                ].map((r) => (
+                  <li key={r} className="flex items-start gap-2 text-sm text-white/70">
+                    <span className="mt-2 size-1 shrink-0 rounded-full bg-amber-400" />
+                    {r}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          {/* Sources */}
+          <section>
+            <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-white/40">
+              <Globe className="size-3.5 text-blue-400" />
+              Sources cited
+            </h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {SOURCES.map((s) => (
+                <span
+                  key={s.label}
+                  className="rounded-full border border-white/8 bg-white/4 px-3 py-1 text-[11px] text-white/60"
+                >
+                  {s.label}
+                </span>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        {/* Footer CTA */}
+        <div className="flex flex-col gap-3 border-t border-white/8 bg-white/2 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-white/50">
+            Want this for <span className="text-white">your</span> idea? It takes one
+            question.
+          </p>
+          <Button onClick={onStartResearch} className="gap-2">
+            Start Research <ArrowRight className="size-4" />
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Hero mock dashboard                                                 */
 /* ------------------------------------------------------------------ */
 
-function HeroDashboard() {
+function HeroDashboard({ onStartResearch }: { onStartResearch: () => void }) {
+  const [briefOpen, setBriefOpen] = useState(false);
   const trend = [34, 42, 40, 55, 58, 66, 72, 84];
   const max = 100;
   const points = trend
@@ -297,12 +542,22 @@ function HeroDashboard() {
               Bright Data Scraper Studio · refreshed 2 min ago
             </span>
           </div>
-          <button className="group flex items-center gap-1 text-xs font-medium text-blue-300 transition-colors hover:text-blue-200">
+          <button
+            type="button"
+            onClick={() => setBriefOpen(true)}
+            className="group flex items-center gap-1 text-xs font-medium text-blue-300 transition-colors hover:text-blue-200"
+          >
             Open full brief
             <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
       </div>
+
+      <HeroBriefDialog
+        open={briefOpen}
+        onOpenChange={setBriefOpen}
+        onStartResearch={onStartResearch}
+      />
 
       {/* Floating chips */}
       <motion.div
@@ -426,7 +681,7 @@ export default function Landing() {
         </div>
 
         <div id="demo" className="mx-auto max-w-6xl scroll-mt-24 px-5">
-          <HeroDashboard />
+          <HeroDashboard onStartResearch={startResearch} />
         </div>
       </section>
 
