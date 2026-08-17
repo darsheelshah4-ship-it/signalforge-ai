@@ -62,13 +62,13 @@ function FadeIn({
 }
 
 const SOURCES = [
-  { label: "Product Hunt", glyph: "▲" },
-  { label: "Hacker News", glyph: "Y" },
-  { label: "GitHub", glyph: "⌥" },
-  { label: "Reddit", glyph: "◎" },
-  { label: "Y Combinator", glyph: "YC" },
-  { label: "Company Blogs", glyph: "✎" },
-  { label: "Career Pages", glyph: "⌂" },
+  { label: "Product Hunt", glyph: "▲", to: "/dashboard/product-hunt" },
+  { label: "Hacker News", glyph: "Y", to: "/dashboard/trends" },
+  { label: "GitHub", glyph: "⌥", to: "/dashboard/github" },
+  { label: "Reddit", glyph: "◎", to: "/dashboard/reddit" },
+  { label: "Y Combinator", glyph: "YC", to: "/dashboard/startups" },
+  { label: "Company Blogs", glyph: "✎", to: "/dashboard/competitors" },
+  { label: "Career Pages", glyph: "⌂", to: "/dashboard/competitors" },
 ];
 
 const FEATURES = [
@@ -594,9 +594,10 @@ export default function Landing() {
   const navigate = useNavigate();
   const { isLoading, isAuthenticated } = useAuth();
 
-  const startResearch = () => {
-    navigate(isAuthenticated ? "/dashboard" : "/auth?returnTo=/dashboard");
+  const go = (path: string) => {
+    navigate(isAuthenticated ? path : `/auth?returnTo=${path}`);
   };
+  const startResearch = () => go("/dashboard");
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-[#0b0b0d] text-white">
@@ -696,9 +697,12 @@ export default function Landing() {
           <FadeIn delay={0.1}>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {SOURCES.map((s) => (
-                <div
+                <button
                   key={s.label}
-                  className="group flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400/30 hover:bg-blue-500/10"
+                  type="button"
+                  onClick={() => go(s.to)}
+                  title={`View ${s.label} signals`}
+                  className="group flex cursor-pointer items-center gap-2.5 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400/30 hover:bg-blue-500/10"
                 >
                   <span className="flex size-6 items-center justify-center rounded-md bg-white/6 text-xs font-bold text-blue-300 transition-colors group-hover:bg-blue-500/20">
                     {s.glyph}
@@ -706,7 +710,8 @@ export default function Landing() {
                   <span className="text-sm font-medium text-white/70 transition-colors group-hover:text-white">
                     {s.label}
                   </span>
-                </div>
+                  <ChevronRight className="size-3.5 text-blue-300 opacity-0 transition-opacity group-hover:opacity-100" />
+                </button>
               ))}
             </div>
           </FadeIn>
