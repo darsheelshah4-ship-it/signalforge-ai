@@ -126,7 +126,7 @@ const PLANS = [
   },
   {
     name: "Pro",
-    price: "$49",
+    price: "$24.99",
     period: "per month",
     description: "For active founders and indie hackers validating and tracking markets.",
     cta: "Go Pro",
