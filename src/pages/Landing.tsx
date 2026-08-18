@@ -76,31 +76,37 @@ const FEATURES = [
     icon: Radar,
     title: "Live web scraping",
     body: "Bright Data Scraper Studio continuously pulls public signals from Product Hunt, Hacker News, GitHub, Reddit, YC batches, company blogs, and career pages — no manual tab-hopping.",
+    to: "/dashboard/trends",
   },
   {
     icon: Sparkles,
     title: "AI research assistant",
     body: "Ask questions in plain English and get structured answers backed by real web data — with sources, numbers, and caveats attached.",
+    to: "/dashboard/search",
   },
   {
     icon: BarChart3,
     title: "Competitor intelligence",
     body: "Monitor product launches, pricing changes, funding rounds, hiring trends, and feature releases across your competitive set, automatically.",
+    to: "/dashboard/competitors",
   },
   {
     icon: Rocket,
     title: "Startup discovery",
     body: "Surface emerging startups before they trend — ranked by funding momentum, developer interest, and community discussion.",
+    to: "/dashboard/startups",
   },
   {
     icon: TrendingUp,
     title: "Market opportunity finder",
     body: "Every category gets an opportunity score out of 100, weighted across growth, competition, funding, hiring, developer interest, and community signal.",
+    to: "/dashboard/search",
   },
   {
     icon: Newspaper,
     title: "Daily intelligence digest",
     body: "Wake up to an AI-written brief of the startup ecosystem changes that actually matter to your market.",
+    to: "/dashboard/overview",
   },
 ];
 
@@ -739,7 +745,11 @@ export default function Landing() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f, i) => (
               <FadeIn key={f.title} delay={0.05 * i}>
-                <div className="group relative h-full overflow-hidden rounded-2xl border border-white/8 bg-[#101014] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/30">
+                <button
+                  type="button"
+                  onClick={() => go(f.to)}
+                  className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/8 bg-[#101014] p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/30"
+                >
                   <div
                     aria-hidden
                     className="absolute -right-10 -top-10 size-28 rounded-full bg-blue-500/10 blur-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100"
@@ -748,8 +758,11 @@ export default function Landing() {
                     <f.icon className="size-5" />
                   </div>
                   <h3 className="mt-5 text-lg font-semibold text-white">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/50">{f.body}</p>
-                </div>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-white/50">{f.body}</p>
+                  <span className="mt-4 flex items-center gap-1.5 text-xs font-medium text-blue-300 opacity-0 transition-opacity group-hover:opacity-100">
+                    Explore <ChevronRight className="size-3.5" />
+                  </span>
+                </button>
               </FadeIn>
             ))}
           </div>
